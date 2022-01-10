@@ -1,19 +1,16 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.1'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Basic
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
-
-# Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
-
-# Use Puma as the app server
 gem 'puma', '~> 4.1'
-
-# Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+#Auth
+gem 'devise_token_auth', '~> 1.1.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
