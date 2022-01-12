@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :product do
-    name { "MyString" }
-    description { "MyText" }
-    price { "9.99" }
+    sequence(:name) { |number| "Basic #{number}" }
+    description { Faker::Lorem::paragraph }
+    price { Faker::Commerce::price(range: 100.0..400.0) }
     productable { nil }
   end
 end
