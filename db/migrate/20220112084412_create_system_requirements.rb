@@ -1,4 +1,4 @@
-class CreateSystemRequirements < ActiveRecord::Migration[6.0]
+class CreateSystemRequirement < ActiveRecord::Migration[6.0]
   def change
     create_table :system_requirements do |t|
       t.string :name

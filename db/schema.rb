@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(version: 2022_01_12_092653) do
     t.integer "mode"
     t.datetime "release_date"
     t.string "developer"
-    t.bigint "system_requirements_id", null: false
+    t.bigint "system_requirement_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["system_requirements_id"], name: "index_games_on_system_requirements_id"
+    t.index ["system_requirement_id"], name: "index_games_on_system_requirement_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -77,5 +77,5 @@ ActiveRecord::Schema.define(version: 2022_01_12_092653) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  add_foreign_key "games", "system_requirements", column: "system_requirements_id"
+  add_foreign_key "games", "system_requirements"
 end
