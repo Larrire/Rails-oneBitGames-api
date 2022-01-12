@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :game do
-    mode { 1 }
+    mode { %i(pvp pve both).sample }
     release_date { "2022-01-12 06:26:53" }
-    developer { "MyString" }
-    system_requirements { nil }
+    developer { Faker::Company.name }
+    system_requirement
   end
 end
