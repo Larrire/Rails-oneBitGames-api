@@ -1,2 +1,3 @@
-class Admin::V1::CategoriesController < ApplicationController
+class Admin::V1::CategoriesController < ApiController
+
 end
