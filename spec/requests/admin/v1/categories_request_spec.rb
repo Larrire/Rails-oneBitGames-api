@@ -35,7 +35,7 @@ RSpec.describe "Admin::V1::Categories", type: :request do
 
       it "returns last added category" do
         post url, headers: auth_header(user), params: category_params
-        expect_category = Category.last.as_json( %i(id, name) )
+        expect_category = Category.last.as_json(only: %i(id name))
         expect(body_json['category']).to eq expect_category
       end
 
@@ -47,7 +47,7 @@ RSpec.describe "Admin::V1::Categories", type: :request do
 
     context "with invalid params" do
       let(:category_invalid_params) do
-        { category: attributes_for(:category), name: nil }.to_json
+        { category: attributes_for(:category, name: nil) }.to_json
       end
 
       it "does not add a new category" do
