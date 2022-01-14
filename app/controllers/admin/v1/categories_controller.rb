@@ -17,7 +17,7 @@ module Admin::V1
       params.require(:category).permit(:name)
     end
 
-    def save_category
+    def save_category!
       @category.save!
       render :show
     rescue
