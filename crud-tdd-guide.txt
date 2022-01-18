@@ -1,0 +1,18 @@
+
+CRUD TDD Guide
+
+  1 - Create Model - ex: rails generate model Category name:string
+
+  2 - Verify new migration file
+
+  3 - Run rails db:migrate
+
+  4 - Create Model Specs
+
+  5 - Create Model validations and relationships
+
+  6 - Create FactoryBot for new Model tests
+
+  7 - Create Controller - "rails g controller ControllerName"
+
+  8 - Create request specs for the new Controller
