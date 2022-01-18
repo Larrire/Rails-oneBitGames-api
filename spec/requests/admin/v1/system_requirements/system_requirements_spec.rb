@@ -15,7 +15,7 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
       get url, headers: auth_header(user)
       expect(response).to have_http_status(:ok)
     end
-  end
+  end # GET
 
   context "POST /system_requirements" do
     let(:url) { "/admin/v1/system_requirements" }
@@ -41,14 +41,11 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
-
-
-
-  end
+  end # POST
 
   context "PATCH /system_requirements/:id" do
-  end
+  end # PATCH
 
   context "DELETE /system_requirements/:id" do
-  end
+  end # DELETE
 end
