@@ -13,6 +13,15 @@ module Admin::V1
     rescue
       render_error(fields: @system_requirement.errors.messages)
     end
+
+    def update
+      @system_requirement = SystemRequirement.find(params[:id])
+      @system_requirement.attributes = system_requirement_params
+      @system_requirement.save!
+      render :show
+    rescue
+      render_error(fields: @system_requirement.errors.messages)
+    end
     
     private
 
