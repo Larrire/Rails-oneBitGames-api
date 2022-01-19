@@ -139,5 +139,24 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
   end # PATCH
 
   context "DELETE /system_requirements/:id" do
+    let(:user) { create(:user) }
+    let!(:system_requirement) { create(:system_requirement) }
+    let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
+    
+    it "deletes SystemRequirements" do
+      expect do
+        delete url, headers: auth_header(user)
+      end.to change(SystemRequirement, :count).by(-1)
+    end
+      
+    it "returns success status" do
+      delete url, headers: auth_header(user)
+      expect(response).to have_http_status(:no_content) # 204
+    end
+    
+    it "does not return any body content" do
+      delete url, headers: auth_header(user)
+      expect(body_json).to_not be_present
+    end
   end # DELETE
 end
