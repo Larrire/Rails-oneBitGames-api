@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Admin::V1::SystemRequirements", type: :request do
+RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
   context "GET /system_requirements" do
     let!(:system_requirements) { create_list(:system_requirement, 5) }
     let(:url) { "/admin/v1/system_requirements" }
