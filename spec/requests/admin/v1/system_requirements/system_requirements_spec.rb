@@ -32,7 +32,7 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
 
       it "returns last added SystemRequirement" do
         post url, headers: auth_header(user), params: system_requirement_params
-        expected_system_requirement = SystemRequirement.last.as_json( only: %i(id name) )
+        expected_system_requirement = SystemRequirement.last.as_json( only: %i(id name operational_system storage processor memory video_board) )
         expect(body_json['system_requirement']).to eq expected_system_requirement
       end
 
@@ -51,10 +51,6 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
         memory: nil,
         video_board: nil,
       }.to_json}
-
-      # let(:invalid_system_requirement_params) do
-      #   { system_requirement: attributes_for(:system_requirement, name: nil) }.to_json
-      # end
 
       it "does not add a new SystemRequirement" do
         expect do
@@ -80,17 +76,41 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
     let(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
     let(:user) { create(:user) }
-    let(:new_attributes) {{
-      name: 'New name',
-      operational_system: 'New oparational system',
-      storage: 'New storage',
-      processor: 'New processor',
-      memory: 'New memory',
-      video_board: 'New video board'
-    }}
+    
+    context "with valid params" do
+      let(:new_attributes) {{
+        name: 'New name',
+        operational_system: 'New oparational system',
+        storage: 'New storagessss',
+        processor: 'New processor',
+        memory: 'New memory',
+        video_board: 'New video board'
+      }.to_json}
 
+      it "updates system_requirement" do
+        patch url, headers: auth_header(user), params: new_attributes
+        system_requirement.reload
+        reloaded_attributes = system_requirement.to_json(except: %i(id created_at updated_at))
+        expect(reloaded_attributes).to eq new_attributes
+      end
 
+      it "returns updated system_requirement" do
+        patch url, headers: auth_header(user), params: new_attributes
+        system_requirement.reload
+        expected_system_requirement = system_requirement.as_json(except: %i(created_at updated_at))
+        expect(body_json['system_requirement']).to eq expected_system_requirement
+      end
 
+      it "returns success status" do
+        patch url, headers: auth_header(user), params: new_attributes
+        expect(response).to have_http_status(:ok) 
+      end
+
+    end
+
+    context "with invalid params" do
+
+    end
     
   end # PATCH
 
