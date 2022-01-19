@@ -21,7 +21,13 @@ module Admin::V1
     def destroy
       @system_requirement.destroy!
     rescue
-      render_error(fields: @category.errors.messages)
+      render_error(fields: @system_requirement.errors.messages)
+    end
+
+    def show
+      @system_requirement = SystemRequirement.find(params[:id])
+    rescue
+      render_error(message: 'System requirement not found')
     end
     
     private
