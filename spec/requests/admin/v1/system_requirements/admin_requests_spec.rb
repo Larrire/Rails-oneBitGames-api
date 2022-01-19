@@ -72,6 +72,45 @@ RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
 
   end # POST
 
+  context "GET /system_requirements/:id" do
+    let(:user) { create(:user) }
+
+    context "with a valid id" do
+      let!(:system_requirement) { create(:system_requirement) }
+      let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
+
+      it "returns requested SystemRequirement" do
+        get url, headers: auth_header(user)
+        expect(body_json['system_requirement']).to eq system_requirement.as_json(except: %i(created_at updated_at))
+      end
+
+      it "returns success status" do
+        get url, headers: auth_header(user)
+        expect(response).to have_http_status(:ok)
+      end
+      
+    end
+
+    context "with an invalid id" do
+      let(:url) { "/admin/v1/system_requirements/999" }
+
+      it "does not return SystemRequirement" do
+        get url, headers: auth_header(user)
+        expect(body_json['system_requirement']).to_not be_present
+      end
+
+      it "returns error messages" do
+        get url, headers: auth_header(user)
+        expect(body_json['errors']['message']).to eq 'System requirement not found'
+      end
+
+      it "returns unprocessable_entity status" do
+        get url, headers: auth_header(user)
+        expect(response).to have_http_status(:unprocessable_entity) # 422
+      end
+    end
+  end
+
   context "PATCH /system_requirements/:id" do
     let(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
