@@ -22,6 +22,11 @@ module Admin::V1
     rescue
       render_error(fields: @system_requirement.errors.messages)
     end
+
+    def destroy
+      @system_requirement = SystemRequirement.find(params[:id])
+      @system_requirement.destroy!
+    end
     
     private
 
