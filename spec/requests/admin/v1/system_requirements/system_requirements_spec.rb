@@ -109,9 +109,33 @@ RSpec.describe "Admin::V1::SystemRequirements", type: :request do
     end
 
     context "with invalid params" do
+      let(:invalid_new_attributes) {{
+        name: nil,
+        operational_system: nil,
+        storage: nil,
+        processor: nil,
+        memory: nil,
+        video_board: nil
+      }.to_json}
 
+      it "does not update the SystemRequirement" do
+        patch url, headers: auth_header(user), params: invalid_new_attributes
+        old_attributes = system_requirement.to_json(except: %i(id created_at updated_at))
+        system_requirement.reload
+        reloaded_attributes = system_requirement.to_json(except: %i(id created_at updated_at))
+        expect(reloaded_attributes).to eq old_attributes
+      end
+
+      it "returns error messages" do
+        patch url, headers: auth_header(user), params: invalid_new_attributes
+        expect(body_json['errors']['fields'].keys).to contain_exactly *['name', 'operational_system', 'storage', 'processor', 'memory', 'video_board']
+      end
+
+      it "returns unprocessable_entity status" do
+        patch url, headers: auth_header(user), params: invalid_new_attributes
+        expect(response).to have_http_status(:unprocessable_entity) # 422
+      end
     end
-    
   end # PATCH
 
   context "DELETE /system_requirements/:id" do
