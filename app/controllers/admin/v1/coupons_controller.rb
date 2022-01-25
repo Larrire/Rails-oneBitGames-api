@@ -13,6 +13,8 @@ module Admin::V1
 
     def show
       @coupon = Coupon.find(params[:id])
+    rescue
+      render_error(message: 'Coupon not found')
     end
 
     private
