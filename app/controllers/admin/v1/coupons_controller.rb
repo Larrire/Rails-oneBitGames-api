@@ -15,6 +15,9 @@ module Admin::V1
       @coupon = Coupon.find(params[:id])
       @coupon.attributes = coupon_params
       @coupon.save!
+      render :show
+    rescue
+      render_error(messages: fields: @coupon.errors.messages)
     end
 
     def show
