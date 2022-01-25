@@ -11,6 +11,12 @@ module Admin::V1
       save_coupon!
     end
 
+    def update
+      @coupon = Coupon.find(params[:id])
+      @coupon.attributes = coupon_params
+      @coupon.save!
+    end
+
     def show
       @coupon = Coupon.find(params[:id])
     rescue
