@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
       resources :coupons
 
+      resources :users
+
     end
   end
 
