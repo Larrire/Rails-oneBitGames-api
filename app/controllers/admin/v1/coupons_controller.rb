@@ -1,5 +1,7 @@
 module Admin::V1
   class CouponsController < ApiController
+
+    before_action :load_coupon, only: [:update, :destroy]
     
     def index
       @coupons = Coupon.all
@@ -12,12 +14,8 @@ module Admin::V1
     end
 
     def update
-      @coupon = Coupon.find(params[:id])
       @coupon.attributes = coupon_params
-      @coupon.save!
-      render :show
-    rescue
-      render_error(fields: @coupon.errors.messages)
+      save_coupon!
     end
 
     def show
@@ -27,7 +25,6 @@ module Admin::V1
     end
 
     def destroy
-      @coupon = Coupon.find(params[:id])
       @coupon.destroy!
     end
 
@@ -40,12 +37,16 @@ module Admin::V1
       ))
     end
 
+    def load_coupon
+      @coupon = Coupon.find(params[:id])
+    end
+
     def save_coupon!
       @coupon.save!
       render :show
     rescue
       render_error(fields: @coupon.errors.messages)
     end
-
+    
   end
 end
