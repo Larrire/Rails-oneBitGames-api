@@ -26,6 +26,11 @@ module Admin::V1
       render_error(message: 'Coupon not found')
     end
 
+    def destroy
+      @coupon = Coupon.find(params[:id])
+      @coupon.destroy!
+    end
+
     private
 
     def coupon_params
