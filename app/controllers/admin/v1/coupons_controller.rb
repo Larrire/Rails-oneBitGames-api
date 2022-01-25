@@ -17,7 +17,7 @@ module Admin::V1
       @coupon.save!
       render :show
     rescue
-      render_error(messages: fields: @coupon.errors.messages)
+      render_error(fields: @coupon.errors.messages)
     end
 
     def show
