@@ -11,6 +11,10 @@ module Admin::V1
       save_coupon!
     end
 
+    def show
+      @coupon = Coupon.find(params[:id])
+    end
+
     private
 
     def coupon_params
