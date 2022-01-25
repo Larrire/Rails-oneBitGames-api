@@ -17,6 +17,42 @@ RSpec.describe "Admin::V1::Users as :admin", type: :request do
       get url, headers: auth_header(requestUser)
       expect(response).to have_http_status(:ok)
     end
-  end
+  end #GET
+
+  context "POST /users" do
+
+    context "with valid params" do
+
+      it "adds a new User" do
+
+      end
+
+      it "returns last added User" do
+
+      end
+
+      it "returns success status" do
+
+      end
+
+    end #valid-params
+
+    context "with invalid params" do
+
+      it "does not add a new user" do
+
+      end
+
+      it "returns errors messages" do
+
+      end
+
+      it "returns unprocessable_entity status" do
+
+      end
+
+    end #invalid-params
+
+  end #POST
 
 end
