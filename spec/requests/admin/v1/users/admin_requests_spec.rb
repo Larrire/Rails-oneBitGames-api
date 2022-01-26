@@ -104,4 +104,54 @@ RSpec.describe "Admin::V1::Users as :admin", type: :request do
     
   end #GET
 
+  context "PATCH /users/:id" do
+    let!(:user) { create(:user) }
+    let(:url) { "/admin/v1/users/#{user.id}" }
+
+    context "with valid params" do
+      let(:new_name) { "Joao" }
+      let(:user_params) { {user: {name: new_name}}.to_json }
+
+      it "updates the User" do
+        patch url, headers: auth_header(requestUser), params: user_params
+        user.reload
+        expect(user.name).to eq new_name
+      end
+
+      it "returns the updated User" do
+        patch url, headers: auth_header(requestUser), params: user_params
+        user.reload
+        expected_user = User.find(user.id).as_json(only: %i(id name email profile))
+        expect(body_json['user']).to eq expected_user
+      end
+
+      it "returns success status" do
+        patch url, headers: auth_header(requestUser), params: user_params
+        expect(response).to have_http_status(:ok)
+      end
+    end #valid-params
+
+    context "with invalid params" do
+      let(:user_invalid_params) { {user: {name: nil}}.to_json }
+
+      it "does not update the User" do
+        old_name = user.name
+        patch url, headers: auth_header(requestUser), params: user_invalid_params
+        user.reload
+        expect(user.name).to eq old_name
+      end
+
+      it "returns error messages" do
+        patch url, headers: auth_header(requestUser), params: user_invalid_params
+        expect(body_json['errors']['fields']).to have_key('name')
+      end
+
+      it "returns unprocessable_entity status" do
+        patch url, headers: auth_header(requestUser), params: user_invalid_params
+        expect(response).to have_http_status(:unprocessable_entity) #422
+      end
+    end #invalid-params
+
+  end #PATCH
+
 end
