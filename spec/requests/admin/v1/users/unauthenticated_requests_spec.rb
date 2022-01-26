@@ -17,6 +17,15 @@ RSpec.describe "Admin::V1::Users without authentication", type: :request do
     include_examples "unauthenticated access"
   end
 
+  context "GET /users/:id" do
+    let(:user) { create(:user) }
+    let(:url) { "/admin/v1/users/#{user.id}" }
+
+    before(:each) { get url }
+
+    include_examples "unauthenticated access"
+  end
+
   context "PATCH /users/:id" do
     let(:user) { create(:user) }
     let(:url) { "/admin/v1/users/#{user.id}" }
