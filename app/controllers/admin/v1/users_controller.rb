@@ -12,7 +12,9 @@ module Admin::V1
     end
   
     def show
-  
+      @user = User.find(params[:id])
+    rescue
+      render_error(message: 'User not found')
     end
   
     def update
