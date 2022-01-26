@@ -22,7 +22,7 @@ RSpec.describe "Admin::V1::Users as :client", type: :request do
     let(:user) { create(:user) }
     let(:url) { "/admin/v1/users/#{user.id}" }
 
-    before(:each) { get url, headers: auth_header(login_user) }
+    before(:each) { get url, headers: auth_header(requestUser) }
 
     include_examples "forbidden access"
   end #GET
