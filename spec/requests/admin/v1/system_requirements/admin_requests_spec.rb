@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
+  let(:user) { create(:user) }
+
   context "GET /system_requirements" do
     let!(:system_requirements) { create_list(:system_requirement, 5) }
     let(:url) { "/admin/v1/system_requirements" }
-    let(:user) { create(:user) }
 
     it "returns all system requirements" do
       get url, headers: auth_header(user)
@@ -19,7 +20,6 @@ RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
 
   context "POST /system_requirements" do
     let(:url) { "/admin/v1/system_requirements" }
-    let(:user) { create(:user) }
 
     context "with valid params" do
       let(:system_requirement_params) { {system_requirement: attributes_for(:system_requirement)}.to_json }
@@ -73,7 +73,6 @@ RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
   end # POST
 
   context "GET /system_requirements/:id" do
-    let(:user) { create(:user) }
 
     context "with a valid id" do
       let!(:system_requirement) { create(:system_requirement) }
@@ -109,12 +108,11 @@ RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
         expect(response).to have_http_status(:unprocessable_entity) # 422
       end
     end
-  end
+  end # GET
 
   context "PATCH /system_requirements/:id" do
     let(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
-    let(:user) { create(:user) }
     
     context "with valid params" do
       let(:new_attributes) {{
@@ -178,24 +176,48 @@ RSpec.describe "Admin::V1::SystemRequirements as :admin", type: :request do
   end # PATCH
 
   context "DELETE /system_requirements/:id" do
-    let(:user) { create(:user) }
     let!(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
     
-    it "deletes SystemRequirements" do
-      expect do
+    context "without an associated Game" do
+      it "deletes SystemRequirements" do
+        expect do
+          delete url, headers: auth_header(user)
+        end.to change(SystemRequirement, :count).by(-1)
+      end
+        
+      it "returns success status" do
         delete url, headers: auth_header(user)
-      end.to change(SystemRequirement, :count).by(-1)
-    end
+        expect(response).to have_http_status(:no_content) # 204
+      end
       
-    it "returns success status" do
-      delete url, headers: auth_header(user)
-      expect(response).to have_http_status(:no_content) # 204
-    end
+      it "does not return any body content" do
+        delete url, headers: auth_header(user)
+        expect(body_json).to_not be_present
+      end
+    end #without-game-assoc
+
+    context "with an associated Game" do
+      before(:each) do 
+        create(:game, system_requirement: system_requirement)
+      end
+
+      it "does not remove SystemRequirement" do
+        expect do
+          delete url, headers: auth_header(user)
+        end.to_not change(SystemRequirement, :count)
+      end
+
+      it "returns unprocessable_entity status" do
+        delete url, headers: auth_header(user)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns error on :base key" do
+        delete url, headers: auth_header(user)
+        expect(body_json['errors']['fields']).to have_key('base')
+      end
     
-    it "does not return any body content" do
-      delete url, headers: auth_header(user)
-      expect(body_json).to_not be_present
     end
   end # DELETE
 end
