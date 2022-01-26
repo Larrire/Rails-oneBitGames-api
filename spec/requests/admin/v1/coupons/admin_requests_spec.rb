@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::V1::CouponsController as :admin", type: :request do
+  let(:user) { create(:user) }
 
   context "GET /coupons" do
     let!(:coupons) { create_list(:coupon, 5) }
-    let(:user) { create(:user) }
     let(:url) { "/admin/v1/coupons" }
 
     it "returns all Coupons" do
@@ -20,7 +20,6 @@ RSpec.describe "Admin::V1::CouponsController as :admin", type: :request do
 
   context "POST /coupons" do
     let(:url) { "/admin/v1/coupons" }
-    let(:user) { create(:user) }
 
     context "with valid params" do
       let(:coupon_params) { {coupon: attributes_for(:coupon)}.to_json }
@@ -67,7 +66,6 @@ RSpec.describe "Admin::V1::CouponsController as :admin", type: :request do
   end
 
   context "GET /coupons/:id" do
-    let(:user) { create(:user) }
     
     context "with a valid id" do
       let(:coupon) { create(:coupon) }
@@ -105,7 +103,6 @@ RSpec.describe "Admin::V1::CouponsController as :admin", type: :request do
   end
 
   context "PATCH /coupons/:id" do
-    let(:user) { create(:user) }
     let(:coupon) { create(:coupon) }
     let(:url) { "/admin/v1/coupons/#{coupon.id}" }
 
@@ -156,7 +153,6 @@ RSpec.describe "Admin::V1::CouponsController as :admin", type: :request do
   end
 
   context "DELETE /coupons/:id" do
-    let(:user) { create(:user) }
     let!(:coupon) { create(:coupon) }
     let(:url) { "/admin/v1/coupons/#{coupon.id}" }
     
