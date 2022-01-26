@@ -6,7 +6,9 @@ module Admin::V1
     end
   
     def create
-  
+      @user = User.new
+      @user.attributes = user_params
+      save_user!
     end
   
     def show
@@ -24,7 +26,10 @@ module Admin::V1
     private
   
     def user_params
-  
+      return {} unless params.has_key?(:user)
+      params.require(:user).permit( %i(
+        name email password password_confirmation
+      ))
     end
   
     def load_user
@@ -32,7 +37,10 @@ module Admin::V1
     end
   
     def save_user!
-  
+      @user.save!
+      render :show
+    rescue
+      render_error(fields: @user.errors.messages)
     end
   end
 end
