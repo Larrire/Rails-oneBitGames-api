@@ -154,4 +154,24 @@ RSpec.describe "Admin::V1::Users as :admin", type: :request do
 
   end #PATCH
 
+  context "DELETE /users/:id" do
+    let!(:user) { create(:user) }
+    let(:url) { "/admin/v1/users/#{user.id}" }
+
+    it "deletes a User" do
+      expect do
+        delete url, headers: auth_header(requestUser)
+      end.to change(User, :count).by(-1)
+    end
+
+    it "does not return any content" do
+      delete url, headers: auth_header(requestUser)
+      expect(body_json['user']).to_not be_present
+    end
+
+    it "returns no_content status" do
+      delete url, headers: auth_header(requestUser)
+      expect(response).to have_http_status(:no_content) #204
+    end
+  end
 end
