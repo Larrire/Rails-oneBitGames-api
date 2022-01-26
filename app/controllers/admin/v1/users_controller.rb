@@ -1,7 +1,7 @@
 module Admin::V1
   class UsersController < ApiController
 
-    before_action :load_user, only: [:update]
+    before_action :load_user, only: [:update, :destroy]
 
     def index
       @users = User.all
@@ -25,7 +25,7 @@ module Admin::V1
     end
   
     def destroy
-  
+      @user.destroy!
     end
   
     private
