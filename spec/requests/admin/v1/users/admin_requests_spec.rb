@@ -45,21 +45,26 @@ RSpec.describe "Admin::V1::Users as :admin", type: :request do
     end #valid-params
 
     context "with invalid params" do
+      let(:user_invalid_params) { {user: attributes_for(:user, name: nil)}.to_json }
 
       it "does not add a new user" do
-
+        expect do
+          post url, headers: auth_header(requestUser), params: user_invalid_params
+        end.to_not change(User, :count)
       end
 
       it "returns errors messages" do
-
+        post url, headers: auth_header(requestUser), params: user_invalid_params
+        expect(body_json['errors']['fields']).to have_key('name')
       end
 
       it "returns unprocessable_entity status" do
-
+        post url, headers: auth_header(requestUser), params: user_invalid_params
+        expect(response).to have_http_status(:unprocessable_entity)
       end
-
     end #invalid-params
-
   end #POST
+
+  
 
 end
