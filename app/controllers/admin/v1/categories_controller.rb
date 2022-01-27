@@ -12,6 +12,12 @@ module Admin::V1
       save_category!
     end
 
+    def show
+      @category = Category.find(params[:id])
+    rescue
+      render_error(message: 'Category not found')
+    end
+
     def update
       @category.attributes = category_params
       save_category!
