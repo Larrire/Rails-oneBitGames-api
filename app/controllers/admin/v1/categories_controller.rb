@@ -3,7 +3,7 @@ module Admin::V1
     before_action :load_category, only: [:update, :destroy]
     
     def index
-      @categories = Category.all      
+      @categories = Category.all
     end
 
     def create
