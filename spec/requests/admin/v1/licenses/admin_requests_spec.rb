@@ -3,9 +3,10 @@ require 'rails_helper'
 
 RSpec.describe 'Admin::V1::Licenses as :admin', type: :request do
   let(:user) { create(:user) }
+  let(:game) { create(:game) }
 
   context "GET /licenses" do
-    let!(:licenses) { create_list(:license, 10) }
+    let!(:licenses) { create_list(:license, 10, game: game) }
     let(:url) { "/admin/v1/licenses" }
 
     it "tests" do
