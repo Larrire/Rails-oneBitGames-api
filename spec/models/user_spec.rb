@@ -7,6 +7,6 @@ RSpec.describe User, type: :model do
   # it { is_expected.to validate_presence_of(:email) }
   # it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
   
-  it_behaves_like "name searchable concern", :user
+  it_has_behavior_of "like searchable concern", :user, :name
   it_behaves_like "paginatable concern", :user
 end

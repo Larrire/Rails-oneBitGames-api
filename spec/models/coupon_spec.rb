@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Coupon, type: :model do
+  it { is_expected.to validate_presence_of :name }
+  
   it { is_expected.to validate_presence_of(:code) }
   it { is_expected.to validate_uniqueness_of(:code).case_insensitive }
 
@@ -29,5 +31,6 @@ RSpec.describe Coupon, type: :model do
     expect(subject.errors.keys).to_not include :due_date
   end
 
+  it_has_behavior_of "like searchable concern", :coupon, :name
   it_behaves_like "paginatable concern", :coupon
 end
